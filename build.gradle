@@ -1,62 +1,31 @@
-buildscript {
-  ext {
-    
-    joobyVersion = "3.2.9"
-  }
-}
-
 plugins {
-  id "application"
-  id "io.jooby.run" version "${joobyVersion}"
-  id "io.spring.dependency-management" version "1.0.11.RELEASE"
-  id "com.google.osdetector" version "1.7.0"
-  id "com.github.johnrengelman.shadow" version "7.0.0"
+  id 'java'
 }
 
 group "app"
 version "1.0.0"
-mainClassName = "app.App"
-sourceCompatibility = JavaVersion.VERSION_21
+
+//sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
   mavenLocal()
   mavenCentral()
 }
 
-dependencyManagement {
-  imports {
-    mavenBom "io.jooby:jooby-bom:$joobyVersion"
-  }
+ext {
+  mockitoVersion = "5.12.0"
+  junitVersion = "5.11.0"
 }
 
 dependencies {
-  annotationProcessor "io.jooby:jooby-apt"
-  implementation "io.jooby:jooby-netty"
-  implementation "ch.qos.logback:logback-classic"
-
-  testImplementation "org.junit.jupiter:junit-jupiter-api"
-  testImplementation "org.junit.jupiter:junit-jupiter-engine"
-  testImplementation "io.jooby:jooby-test"
-
-  testImplementation "com.squareup.okhttp3:okhttp"
+  testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+//  testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+//  testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+  testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+  testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+  testImplementation "org.assertj:assertj-core:3.26.3"
 }
 
 test {
   useJUnitPlatform()
-}
-
-/** Java debug information: */
-tasks.withType(JavaCompile) {
-  options.compilerArgs += [
-    '-parameters',
-    '-Ajooby.incremental=true',
-    '-Ajooby.services=true',
-    '-Ajooby.debug=false'
-  ]
-  options.debug = true
-}
-
-
-shadowJar {
-  mergeServiceFiles()
 }
